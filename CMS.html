@@ -1,1 +1,2155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه مدیریت کلاس</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --text-color: #2c3e50;
+            --light-text: #ecf0f1;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --border-color: #ddd;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
+        .dark-mode {
+            --primary-color: #34495e;
+            --secondary-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --bg-color: #1a1a2e;
+            --card-bg: #16213e;
+            --border-color: #2c3e50;
+            --light-text: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 24px;
+            color: var(--accent-color);
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #2c3e50;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #d35400;
+        }
+
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .login-card i {
+            font-size: 50px;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            font-weight: 500;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 15px 20px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .card-header h3 {
+                margin-bottom: 10px;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+                font-size: 14px;
+            }
+            
+            .btn-sm {
+                padding: 4px 6px;
+                font-size: 12px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .contact-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .contact-box {
+                width: 100%;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        /* Persian Date Input */
+        .persian-date-input {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Alert Styles */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 2000;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.3s ease-out;
+            max-width: 400px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .alert-success {
+            background-color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: var(--danger-color);
+        }
+
+        .alert-info {
+            background-color: var(--accent-color);
+        }
+
+        .alert-warning {
+            background-color: var(--warning-color);
+        }
+
+        .alert-close {
+            margin-right: auto;
+            cursor: pointer;
+        }
+
+        /* Button Group */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        /* Contact Container */
+        .contact-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Contact Box */
+        .contact-box {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 300px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-box i {
+            font-size: 24px;
+            color: var(--accent-color);
+        }
+
+        .contact-box-content {
+            flex: 1;
+        }
+
+        .contact-box-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .contact-box a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Calendar Styles */
+        .calendar {
+            font-family: Arial, sans-serif;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-body {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .calendar-day.selected {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .calendar-day.empty {
+            visibility: hidden;
+        }
+
+        /* Custom Select */
+        .select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .select-container select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 30px;
+        }
+
+        .select-container::after {
+            content: "▼";
+            font-size: 12px;
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-card">
+            <i class="fas fa-lock"></i>
+            <h2>ورود به سامانه مدیریت کلاس</h2>
+            <div class="form-group">
+                <label for="password">رمز عبور</label>
+                <input type="password" id="password" class="form-control" placeholder="رمز عبور را وارد کنید">
+            </div>
+            <button class="btn btn-primary" id="loginBtn" style="margin: 0 auto;">ورود به سیستم</button>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="main-content" id="mainApp">
+        <header>
+            <div class="logo">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h1>سامانه مدیریت کلاس</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="darkModeBtn">
+                    <i class="fas fa-moon"></i> حالت شب
+                </button>
+                <button class="btn btn-secondary" id="lockBtn">
+                    <i class="fas fa-lock"></i> قفل سیستم
+                </button>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="tabs">
+                <div class="tab active" data-tab="classManagement">مدیریت کلاس</div>
+                <div class="tab" data-tab="studentManagement">مدیریت دانشجویان</div>
+                <div class="tab" data-tab="attendance">حضور و غیاب</div>
+                <div class="tab" data-tab="reports">گزارشات</div>
+                <div class="tab" data-tab="settings">تنظیمات</div>
+                <div class="tab" data-tab="about">درباره برنامه</div>
+            </div>
+
+            <!-- Class Management Tab -->
+            <div class="tab-content active" id="classManagement">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>تعریف کلاس جدید</h3>
+                        <button class="btn btn-primary" id="addClassBtn">
+                            <i class="fas fa-plus"></i> افزودن کلاس
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="searchClass" class="form-control" placeholder="جستجوی کلاس...">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>لیست کلاس ها</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="classesTable">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام کلاس</th>
+                                    <th>نام استاد</th>
+                                    <th>تاریخ برگزاری</th>
+                                    <th>ساعت شروع</th>
+                                    <th>ساعت پایان</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="classesList">
+                                <!-- Classes will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Management Tab -->
+            <div class="tab-content" id="studentManagement">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>افزودن دانشجو</h3>
+                        <button class="btn btn-primary" id="addStudentBtn">
+                            <i class="fas fa-plus"></i> افزودن دانشجو
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="searchStudent" class="form-control" placeholder="جستجوی دانشجو...">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>لیست دانشجویان</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="studentsTable">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>کد دانشجویی</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsList">
+                                <!-- Students will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Tab -->
+            <div class="tab-content" id="attendance">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>حضور و غیاب</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="selectClassForAttendance">انتخاب کلاس</label>
+                        <select id="selectClassForAttendance" class="form-control">
+                            <option value="">-- انتخاب کنید --</option>
+                            <!-- Classes will be added here dynamically -->
+                        </select>
+                    </div>
+
+                    <div id="attendanceSection" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>لیست دانشجویان</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="attendanceTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>نام و نام خانوادگی</th>
+                                            <th>کد دانشجویی</th>
+                                            <th>وضعیت</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendanceList">
+                                        <!-- Attendance list will be added here dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-success" id="finishClassBtn">
+                                <i class="fas fa-check"></i> پایان کلاس
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div class="tab-content" id="reports">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>گزارشات کلاس ها</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="selectClassForReport">انتخاب کلاس</label>
+                        <select id="selectClassForReport" class="form-control">
+                            <option value="all">همه کلاس ها</option>
+                            <!-- Classes will be added here dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="reportsTable">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام کلاس</th>
+                                    <th>نام استاد</th>
+                                    <th>تعداد جلسات</th>
+                                    <th>تعداد دانشجویان</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsList">
+                                <!-- Reports will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="classDetails" style="display: none; margin-top: 20px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>جزئیات کلاس</h3>
+                            </div>
+                            <div id="classDetailsContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="exportExcelBtn">
+                            <i class="fas fa-file-excel"></i> خروجی اکسل
+                        </button>
+                        <button class="btn btn-success" id="importExcelBtn">
+                            <i class="fas fa-file-import"></i> ورودی اکسل
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>تنظیمات سیستم</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentPassword">رمز عبور فعلی</label>
+                        <input type="password" id="currentPassword" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">رمز عبور جدید</label>
+                        <input type="password" id="newPassword" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">تکرار رمز عبور جدید</label>
+                        <input type="password" id="confirmPassword" class="form-control">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="changePasswordBtn">
+                            <i class="fas fa-save"></i> تغییر رمز عبور
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Tab -->
+            <div class="tab-content" id="about">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>درباره برنامه</h3>
+                    </div>
+                    <div>
+                        <p>این برنامه یک سیستم مدیریت کلاس است که به اساتید و مدرسان کمک می‌کند تا کلاس‌ها و دانشجویان خود را به راحتی مدیریت کنند.</p>
+                        
+                        <h4 style="margin-top: 20px;">ویژگی‌های اصلی:</h4>
+                        <ul style="margin-right: 20px; margin-top: 10px;">
+                            <li>مدیریت کلاس‌ها (افزودن، ویرایش، حذف)</li>
+                            <li>مدیریت دانشجویان (افزودن، ویرایش)</li>
+                            <li>سیستم حضور و غیاب هوشمند</li>
+                            <li>گزارش‌گیری پیشرفته</li>
+                            <li>خروجی و ورودی اکسل</li>
+                            <li>امنیت با رمز عبور</li>
+                            <li>حالت روز و شب</li>
+                        </ul>
+                        
+                        <p style="margin-top: 20px;">این برنامه توسط علی چالاکی توسعه داده شده است.</p>
+                        
+                        <div class="contact-container">
+                            <div class="contact-box">
+                                <i class="fas fa-globe"></i>
+                                <div class="contact-box-content">
+                                    <div class="contact-box-title">وبسایت سازنده</div>
+                                    <a href="https://alichalaki.github.io/" target="_blank">alichalaki.github.io</a>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-box">
+                                <i class="fas fa-phone"></i>
+                                <div class="contact-box-content">
+                                    <div class="contact-box-title">پشتیبانی و سوالات</div>
+                                    <a href="tel:09102655884">09102655884</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <h3>راهنمای استفاده از برنامه</h3>
+                    </div>
+                    <div>
+                        <h4 style="margin-top: 15px;">مدیریت کلاس‌ها:</h4>
+                        <p>در تب مدیریت کلاس می‌توانید کلاس‌های جدید ایجاد کنید، کلاس‌های موجود را ویرایش یا حذف نمایید.</p>
+                        
+                        <h4 style="margin-top: 15px;">مدیریت دانشجویان:</h4>
+                        <p>در این بخش می‌توانید دانشجویان جدید را به سیستم اضافه کنید و اطلاعات دانشجویان موجود را ویرایش نمایید.</p>
+                        
+                        <h4 style="margin-top: 15px;">حضور و غیاب:</h4>
+                        <p>پس از انتخاب کلاس مورد نظر، وضعیت حضور و غیاب دانشجویان را ثبت نمایید. در پایان هر جلسه، دکمه "پایان کلاس" را بزنید.</p>
+                        
+                        <h4 style="margin-top: 15px;">گزارشات:</h4>
+                        <p>در این بخش می‌توانید گزارشات مختلف از کلاس‌ها و حضور و غیاب دانشجویان را مشاهده و در قالب اکسل ذخیره نمایید.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>تمامی حقوق این نرم‌افزار محفوظ است &copy; 2023 - <a href="https://alichalaki.github.io/" target="_blank">علی چالاکی</a></p>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add/Edit Class Modal -->
+    <div class="modal" id="classModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="classModalTitle">افزودن کلاس جدید</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="className">نام کلاس</label>
+                <input type="text" id="className" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="teacherName">نام استاد</label>
+                <input type="text" id="teacherName" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="classDate">تاریخ برگزاری (شمسی)</label>
+                <input type="text" id="classDate" class="form-control persian-date-input" placeholder="1402/01/01" readonly>
+                <div id="calendarContainer" style="display: none; margin-top: 10px;"></div>
+                <button class="btn btn-secondary btn-sm" id="showCalendarBtn" style="margin-top: 5px;">
+                    <i class="fas fa-calendar"></i> انتخاب تاریخ
+                </button>
+            </div>
+            <div class="form-group">
+                <label for="startTime">ساعت شروع</label>
+                <input type="time" id="startTime" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="endTime">ساعت پایان</label>
+                <input type="time" id="endTime" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelClassBtn">انصراف</button>
+                <button class="btn btn-primary" id="saveClassBtn">ذخیره</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Student Modal -->
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="studentModalTitle">افزودن دانشجو</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="studentName">نام و نام خانوادگی</label>
+                <input type="text" id="studentName" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="studentId">کد دانشجویی</label>
+                <input type="text" id="studentId" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelStudentBtn">انصراف</button>
+                <button class="btn btn-primary" id="saveStudentBtn">ذخیره</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmModalTitle">تایید عملیات</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div id="confirmModalMessage">
+                آیا از انجام این عمل مطمئن هستید؟
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelConfirmBtn">انصراف</button>
+                <button class="btn btn-danger" id="confirmBtn">تایید</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Excel Import Modal -->
+    <div class="modal" id="excelImportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ورود اطلاعات از اکسل</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="excelFile">انتخاب فایل اکسل</label>
+                <input type="file" id="excelFile" class="form-control" accept=".xlsx, .xls">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelExcelImportBtn">انصراف</button>
+                <button class="btn btn-primary" id="importExcelDataBtn">ورود اطلاعات</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let currentPassword = "1376";
+        let classes = [];
+        let students = [];
+        let sessions = [];
+        let attendanceRecords = [];
+        let isDarkMode = false;
+        let currentEditingId = null;
+        let currentAction = null;
+        let currentClassIdForAttendance = null;
+        
+        // Calendar variables
+        let currentCalendarYear = new Date().getFullYear() - 621; // Persian year
+        let currentCalendarMonth = new Date().getMonth() + 1; // 1-12
+
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const mainApp = document.getElementById('mainApp');
+        const loginBtn = document.getElementById('loginBtn');
+        const passwordInput = document.getElementById('password');
+        const lockBtn = document.getElementById('lockBtn');
+        const darkModeBtn = document.getElementById('darkModeBtn');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Class Management Elements
+        const addClassBtn = document.getElementById('addClassBtn');
+        const classesList = document.getElementById('classesList');
+        const classModal = document.getElementById('classModal');
+        const className = document.getElementById('className');
+        const teacherName = document.getElementById('teacherName');
+        const classDate = document.getElementById('classDate');
+        const startTime = document.getElementById('startTime');
+        const endTime = document.getElementById('endTime');
+        const saveClassBtn = document.getElementById('saveClassBtn');
+        const cancelClassBtn = document.getElementById('cancelClassBtn');
+        const searchClass = document.getElementById('searchClass');
+        const showCalendarBtn = document.getElementById('showCalendarBtn');
+        const calendarContainer = document.getElementById('calendarContainer');
+
+        // Student Management Elements
+        const addStudentBtn = document.getElementById('addStudentBtn');
+        const studentsList = document.getElementById('studentsList');
+        const studentModal = document.getElementById('studentModal');
+        const studentId = document.getElementById('studentId');
+        const studentName = document.getElementById('studentName');
+        const saveStudentBtn = document.getElementById('saveStudentBtn');
+        const cancelStudentBtn = document.getElementById('cancelStudentBtn');
+        const searchStudent = document.getElementById('searchStudent');
+
+        // Attendance Elements
+        const selectClassForAttendance = document.getElementById('selectClassForAttendance');
+        const attendanceSection = document.getElementById('attendanceSection');
+        const attendanceList = document.getElementById('attendanceList');
+        const finishClassBtn = document.getElementById('finishClassBtn');
+
+        // Reports Elements
+        const selectClassForReport = document.getElementById('selectClassForReport');
+        const reportsList = document.getElementById('reportsList');
+        const classDetails = document.getElementById('classDetails');
+        const classDetailsContent = document.getElementById('classDetailsContent');
+        const exportExcelBtn = document.getElementById('exportExcelBtn');
+        const importExcelBtn = document.getElementById('importExcelBtn');
+
+        // Settings Elements
+        const currentPasswordInput = document.getElementById('currentPassword');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+
+        // Modal Elements
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmModalMessage = document.getElementById('confirmModalMessage');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+        const excelImportModal = document.getElementById('excelImportModal');
+        const excelFile = document.getElementById('excelFile');
+        const importExcelDataBtn = document.getElementById('importExcelDataBtn');
+        const cancelExcelImportBtn = document.getElementById('cancelExcelImportBtn');
+
+        // Close buttons
+        const closeButtons = document.querySelectorAll('.close');
+
+        // Alert Container
+        const alertContainer = document.getElementById('alertContainer');
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize with some sample data
+            initializeSampleData();
+            renderClasses();
+            renderStudents();
+            updateClassSelects();
+            renderReports();
+        });
+
+        // Login Functionality
+        loginBtn.addEventListener('click', function() {
+            if (passwordInput.value === currentPassword) {
+                loginPage.style.display = 'none';
+                mainApp.style.display = 'block';
+                showAlert('موفقیت', 'با موفقیت وارد سیستم شدید', 'success');
+            } else {
+                showAlert('خطا', 'رمز عبور وارد شده صحیح نیست!', 'error');
+            }
+        });
+
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
+
+        lockBtn.addEventListener('click', function() {
+            mainApp.style.display = 'none';
+            loginPage.style.display = 'flex';
+            passwordInput.value = '';
+        });
+
+        // Dark Mode Toggle
+        darkModeBtn.addEventListener('click', function() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            darkModeBtn.innerHTML = isDarkMode ? 
+                '<i class="fas fa-sun"></i> حالت روز' : 
+                '<i class="fas fa-moon"></i> حالت شب';
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            isDarkMode = true;
+            darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> حالت روز';
+        }
+
+        // Tab Switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Class Management
+        addClassBtn.addEventListener('click', function() {
+            currentEditingId = null;
+            document.getElementById('classModalTitle').textContent = 'افزودن کلاس جدید';
+            className.value = '';
+            teacherName.value = '';
+            classDate.value = '';
+            startTime.value = '';
+            endTime.value = '';
+            calendarContainer.style.display = 'none';
+            classModal.style.display = 'flex';
+        });
+
+        // Calendar functionality
+        showCalendarBtn.addEventListener('click', function() {
+            if (calendarContainer.style.display === 'none') {
+                renderCalendar();
+                calendarContainer.style.display = 'block';
+            } else {
+                calendarContainer.style.display = 'none';
+            }
+        });
+
+        function renderCalendar() {
+            const persianMonths = [
+                'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+                'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+            ];
+
+            // Calculate days in month (simplified - all months have 31 days in this example)
+            const daysInMonth = 31;
+            
+            // Calculate first day of month (simplified - always starts on Saturday in this example)
+            const firstDay = 0; // 0 = Saturday, 1 = Sunday, etc.
+
+            calendarContainer.innerHTML = `
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <button class="btn btn-sm btn-secondary" id="prevMonth"><i class="fas fa-chevron-right"></i></button>
+                        <h4>${persianMonths[currentCalendarMonth - 1]} ${currentCalendarYear}</h4>
+                        <button class="btn btn-sm btn-secondary" id="nextMonth"><i class="fas fa-chevron-left"></i></button>
+                    </div>
+                    <div class="calendar-body" id="calendarDays">
+                        <div style="text-align: center;">ش</div>
+                        <div style="text-align: center;">ی</div>
+                        <div style="text-align: center;">د</div>
+                        <div style="text-align: center;">س</div>
+                        <div style="text-align: center;">چ</div>
+                        <div style="text-align: center;">پ</div>
+                        <div style="text-align: center;">ج</div>
+                    </div>
+                </div>
+            `;
+
+            // Render days
+            const calendarDays = document.getElementById('calendarDays');
+            
+            // Empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day empty';
+                calendarDays.appendChild(emptyCell);
+            }
+
+            // Days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = day;
+                dayCell.addEventListener('click', function() {
+                    // Remove selected class from all days
+                    document.querySelectorAll('.calendar-day').forEach(d => {
+                        d.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked day
+                    this.classList.add('selected');
+                    
+                    // Set the date in the input field
+                    const month = currentCalendarMonth < 10 ? `0${currentCalendarMonth}` : currentCalendarMonth;
+                    const dayFormatted = day < 10 ? `0${day}` : day;
+                    classDate.value = `${currentCalendarYear}/${month}/${dayFormatted}`;
+                });
+                calendarDays.appendChild(dayCell);
+            }
+
+            // Add event listeners for month navigation
+            document.getElementById('prevMonth').addEventListener('click', function() {
+                currentCalendarMonth--;
+                if (currentCalendarMonth < 1) {
+                    currentCalendarMonth = 12;
+                    currentCalendarYear--;
+                }
+                renderCalendar();
+            });
+
+            document.getElementById('nextMonth').addEventListener('click', function() {
+                currentCalendarMonth++;
+                if (currentCalendarMonth > 12) {
+                    currentCalendarMonth = 1;
+                    currentCalendarYear++;
+                }
+                renderCalendar();
+            });
+        }
+
+        saveClassBtn.addEventListener('click', function() {
+            if (!className.value || !teacherName.value || !classDate.value || !startTime.value || !endTime.value) {
+                showAlert('خطا', 'لطفاً تمام فیلدها را پر کنید!', 'error');
+                return;
+            }
+
+            if (currentEditingId) {
+                // Update existing class
+                const index = classes.findIndex(c => c.id === currentEditingId);
+                if (index !== -1) {
+                    classes[index] = {
+                        id: currentEditingId,
+                        name: className.value,
+                        teacher: teacherName.value,
+                        date: classDate.value,
+                        startTime: startTime.value,
+                        endTime: endTime.value
+                    };
+                }
+            } else {
+                // Add new class
+                const newClass = {
+                    id: Date.now().toString(),
+                    name: className.value,
+                    teacher: teacherName.value,
+                    date: classDate.value,
+                    startTime: startTime.value,
+                    endTime: endTime.value
+                };
+                classes.push(newClass);
+            }
+
+            renderClasses();
+            updateClassSelects();
+            renderReports();
+            classModal.style.display = 'none';
+            showAlert('موفقیت', 'کلاس با موفقیت ذخیره شد', 'success');
+        });
+
+        cancelClassBtn.addEventListener('click', function() {
+            classModal.style.display = 'none';
+        });
+
+        searchClass.addEventListener('input', function() {
+            renderClasses();
+        });
+
+        // Student Management
+        addStudentBtn.addEventListener('click', function() {
+            currentEditingId = null;
+            document.getElementById('studentModalTitle').textContent = 'افزودن دانشجو';
+            studentName.value = '';
+            studentId.value = '';
+            studentModal.style.display = 'flex';
+        });
+
+        saveStudentBtn.addEventListener('click', function() {
+            if (!studentName.value || !studentId.value) {
+                showAlert('خطا', 'لطفاً تمام فیلدها را پر کنید!', 'error');
+                return;
+            }
+
+            if (currentEditingId) {
+                // Update existing student
+                const index = students.findIndex(s => s.id === currentEditingId);
+                if (index !== -1) {
+                    students[index] = {
+                        id: currentEditingId,
+                        name: studentName.value,
+                        studentId: studentId.value
+                    };
+                }
+            } else {
+                // Check if student ID already exists
+                if (students.some(s => s.studentId === studentId.value)) {
+                    showAlert('خطا', 'کد دانشجویی تکراری است!', 'error');
+                    return;
+                }
+
+                // Add new student
+                const newStudent = {
+                    id: Date.now().toString(),
+                    name: studentName.value,
+                    studentId: studentId.value
+                };
+                students.push(newStudent);
+            }
+
+            renderStudents();
+            studentModal.style.display = 'none';
+            showAlert('موفقیت', 'دانشجو با موفقیت ذخیره شد', 'success');
+        });
+
+        cancelStudentBtn.addEventListener('click', function() {
+            studentModal.style.display = 'none';
+        });
+
+        searchStudent.addEventListener('input', function() {
+            renderStudents();
+        });
+
+        // Attendance Management
+        selectClassForAttendance.addEventListener('change', function() {
+            const classId = this.value;
+            currentClassIdForAttendance = classId;
+            
+            if (classId) {
+                attendanceSection.style.display = 'block';
+                renderAttendanceList(classId);
+            } else {
+                attendanceSection.style.display = 'none';
+            }
+        });
+
+        finishClassBtn.addEventListener('click', function() {
+            if (!currentClassIdForAttendance) return;
+
+            const classObj = classes.find(c => c.id === currentClassIdForAttendance);
+            if (!classObj) return;
+
+            // Record the session
+            const newSession = {
+                id: Date.now().toString(),
+                classId: currentClassIdForAttendance,
+                date: new Date().toLocaleDateString('fa-IR'),
+                attendanceRecords: attendanceRecords.filter(ar => ar.classId === currentClassIdForAttendance)
+            };
+            sessions.push(newSession);
+
+            // Clear temporary attendance records for this class
+            attendanceRecords = attendanceRecords.filter(ar => ar.classId !== currentClassIdForAttendance);
+
+            // Reset attendance section
+            selectClassForAttendance.value = '';
+            attendanceSection.style.display = 'none';
+            
+            showAlert('موفقیت', 'جلسه کلاس با موفقیت ثبت شد.', 'success');
+            renderReports();
+        });
+
+        // Reports
+        selectClassForReport.addEventListener('change', function() {
+            renderReports();
+        });
+
+        exportExcelBtn.addEventListener('click', function() {
+            // Create a workbook
+            const workbook = {
+                SheetNames: ['کلاس‌ها', 'دانشجویان', 'حضور و غیاب'],
+                Sheets: {
+                    'کلاس‌ها': {
+                        '!ref': 'A1:F' + (classes.length + 1),
+                        A1: { t: 's', v: 'نام کلاس' },
+                        B1: { t: 's', v: 'نام استاد' },
+                        C1: { t: 's', v: 'تاریخ برگزاری' },
+                        D1: { t: 's', v: 'ساعت شروع' },
+                        E1: { t: 's', v: 'ساعت پایان' },
+                        F1: { t: 's', v: 'شناسه کلاس' }
+                    },
+                    'دانشجویان': {
+                        '!ref': 'A1:C' + (students.length + 1),
+                        A1: { t: 's', v: 'نام دانشجو' },
+                        B1: { t: 's', v: 'کد دانشجویی' },
+                        C1: { t: 's', v: 'شناسه دانشجو' }
+                    },
+                    'حضور و غیاب': {
+                        '!ref': 'A1:E' + (sessions.reduce((acc, session) => acc + session.attendanceRecords.length, 0) + 1),
+                        A1: { t: 's', v: 'شناسه کلاس' },
+                        B1: { t: 's', v: 'تاریخ جلسه' },
+                        C1: { t: 's', v: 'شناسه دانشجو' },
+                        D1: { t: 's', v: 'وضعیت حضور' },
+                        E1: { t: 's', v: 'کد دانشجویی' }
+                    }
+                }
+            };
+
+            // Fill classes data
+            classes.forEach((cls, index) => {
+                const row = index + 2;
+                workbook.Sheets['کلاس‌ها']['A' + row] = { t: 's', v: cls.name };
+                workbook.Sheets['کلاس‌ها']['B' + row] = { t: 's', v: cls.teacher };
+                workbook.Sheets['کلاس‌ها']['C' + row] = { t: 's', v: cls.date };
+                workbook.Sheets['کلاس‌ها']['D' + row] = { t: 's', v: cls.startTime };
+                workbook.Sheets['کلاس‌ها']['E' + row] = { t: 's', v: cls.endTime };
+                workbook.Sheets['کلاس‌ها']['F' + row] = { t: 's', v: cls.id };
+            });
+
+            // Fill students data
+            students.forEach((student, index) => {
+                const row = index + 2;
+                workbook.Sheets['دانشجویان']['A' + row] = { t: 's', v: student.name };
+                workbook.Sheets['دانشجویان']['B' + row] = { t: 's', v: student.studentId };
+                workbook.Sheets['دانشجویان']['C' + row] = { t: 's', v: student.id };
+            });
+
+            // Fill attendance data
+            let attendanceRow = 2;
+            sessions.forEach(session => {
+                session.attendanceRecords.forEach(record => {
+                    const student = students.find(s => s.id === record.studentId);
+                    workbook.Sheets['حضور و غیاب']['A' + attendanceRow] = { t: 's', v: session.classId };
+                    workbook.Sheets['حضور و غیاب']['B' + attendanceRow] = { t: 's', v: session.date };
+                    workbook.Sheets['حضور و غیاب']['C' + attendanceRow] = { t: 's', v: record.studentId };
+                    workbook.Sheets['حضور و غیاب']['D' + attendanceRow] = { t: 's', v: record.status === 'present' ? 'حاضر' : 'غایب' };
+                    workbook.Sheets['حضور و غیاب']['E' + attendanceRow] = { t: 's', v: student ? student.studentId : '' };
+                    attendanceRow++;
+                });
+            });
+
+            // Convert workbook to binary Excel file
+            const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+            
+            // Create download link
+            const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'گزارش_کلاس_' + new Date().toLocaleDateString('fa-IR') + '.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showAlert('موفقیت', 'فایل اکسل با موفقیت دانلود شد', 'success');
+        });
+
+        // Helper function for Excel export
+        function s2ab(s) {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        importExcelBtn.addEventListener('click', function() {
+            excelImportModal.style.display = 'flex';
+        });
+
+        importExcelDataBtn.addEventListener('click', function() {
+            if (!excelFile.files.length) {
+                showAlert('خطا', 'لطفاً یک فایل اکسل انتخاب کنید', 'error');
+                return;
+            }
+
+            const file = excelFile.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    // Process classes sheet
+                    if (workbook.Sheets['کلاس‌ها']) {
+                        const classesData = XLSX.utils.sheet_to_json(workbook.Sheets['کلاس‌ها']);
+                        classes = classesData.map(cls => ({
+                            id: cls['شناسه کلاس'] || Date.now().toString(),
+                            name: cls['نام کلاس'],
+                            teacher: cls['نام استاد'],
+                            date: cls['تاریخ برگزاری'],
+                            startTime: cls['ساعت شروع'],
+                            endTime: cls['ساعت پایان']
+                        }));
+                    }
+                    
+                    // Process students sheet
+                    if (workbook.Sheets['دانشجویان']) {
+                        const studentsData = XLSX.utils.sheet_to_json(workbook.Sheets['دانشجویان']);
+                        students = studentsData.map(std => ({
+                            id: std['شناسه دانشجو'] || Date.now().toString(),
+                            name: std['نام دانشجو'],
+                            studentId: std['کد دانشجویی']
+                        }));
+                    }
+                    
+                    // Process attendance sheet
+                    if (workbook.Sheets['حضور و غیاب']) {
+                        const attendanceData = XLSX.utils.sheet_to_json(workbook.Sheets['حضور و غیاب']);
+                        sessions = [];
+                        
+                        // Group attendance records by session
+                        const sessionsMap = {};
+                        attendanceData.forEach(record => {
+                            const sessionKey = `${record['شناسه کلاس']}_${record['تاریخ جلسه']}`;
+                            if (!sessionsMap[sessionKey]) {
+                                sessionsMap[sessionKey] = {
+                                    id: Date.now().toString(),
+                                    classId: record['شناسه کلاس'],
+                                    date: record['تاریخ جلسه'],
+                                    attendanceRecords: []
+                                };
+                            }
+                            
+                            sessionsMap[sessionKey].attendanceRecords.push({
+                                studentId: record['شناسه دانشجو'],
+                                status: record['وضعیت حضور'] === 'حاضر' ? 'present' : 'absent'
+                            });
+                        });
+                        
+                        sessions = Object.values(sessionsMap);
+                    }
+                    
+                    // Update UI
+                    renderClasses();
+                    renderStudents();
+                    updateClassSelects();
+                    renderReports();
+                    
+                    excelImportModal.style.display = 'none';
+                    showAlert('موفقیت', 'اطلاعات با موفقیت وارد سیستم شدند', 'success');
+                } catch (error) {
+                    showAlert('خطا', 'خطا در پردازش فایل اکسل: ' + error.message, 'error');
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+        });
+
+        cancelExcelImportBtn.addEventListener('click', function() {
+            excelImportModal.style.display = 'none';
+        });
+
+        // Settings
+        changePasswordBtn.addEventListener('click', function() {
+            if (currentPasswordInput.value !== currentPassword) {
+                showAlert('خطا', 'رمز عبور فعلی صحیح نیست!', 'error');
+                return;
+            }
+
+            if (newPasswordInput.value !== confirmPasswordInput.value) {
+                showAlert('خطا', 'رمز عبور جدید و تکرار آن مطابقت ندارند!', 'error');
+                return;
+            }
+
+            currentPassword = newPasswordInput.value;
+            currentPasswordInput.value = '';
+            newPasswordInput.value = '';
+            confirmPasswordInput.value = '';
+            showAlert('موفقیت', 'رمز عبور با موفقیت تغییر یافت.', 'success');
+        });
+
+        // Modal Close Buttons
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+
+        // Confirm Modal
+        confirmBtn.addEventListener('click', function() {
+            if (currentAction === 'deleteClass') {
+                classes = classes.filter(c => c.id !== currentEditingId);
+                renderClasses();
+                updateClassSelects();
+                renderReports();
+                showAlert('موفقیت', 'کلاس با موفقیت حذف شد', 'success');
+            } else if (currentAction === 'deleteStudent') {
+                students = students.filter(s => s.id !== currentEditingId);
+                renderStudents();
+                renderReports();
+                showAlert('موفقیت', 'دانشجو با موفقیت حذف شد', 'success');
+            }
+            confirmModal.style.display = 'none';
+        });
+
+        cancelConfirmBtn.addEventListener('click', function() {
+            confirmModal.style.display = 'none';
+        });
+
+        // Window click to close modals
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Helper Functions
+        function initializeSampleData() {
+            // Sample classes
+            classes = [
+                {
+                    id: '1',
+                    name: 'ریاضی عمومی 1',
+                    teacher: 'دکتر احمدی',
+                    date: '1402/01/15',
+                    startTime: '08:00',
+                    endTime: '10:00'
+                },
+                {
+                    id: '2',
+                    name: 'فیزیک 1',
+                    teacher: 'دکتر محمدی',
+                    date: '1402/01/16',
+                    startTime: '10:00',
+                    endTime: '12:00'
+                }
+            ];
+
+            // Sample students
+            students = [
+                {
+                    id: '1',
+                    name: 'علی احمدی',
+                    studentId: '400123456'
+                },
+                {
+                    id: '2',
+                    name: 'مریم محمدی',
+                    studentId: '400654321'
+                },
+                {
+                    id: '3',
+                    name: 'رضا کریمی',
+                    studentId: '400987654'
+                }
+            ];
+
+            // Sample sessions and attendance
+            sessions = [
+                {
+                    id: '1',
+                    classId: '1',
+                    date: '1402/01/15',
+                    attendanceRecords: [
+                        { studentId: '1', status: 'present' },
+                        { studentId: '2', status: 'absent' },
+                        { studentId: '3', status: 'present' }
+                    ]
+                }
+            ];
+        }
+
+        function renderClasses() {
+            const searchTerm = searchClass.value.toLowerCase();
+            const filteredClasses = classes.filter(c => 
+                c.name.toLowerCase().includes(searchTerm) || 
+                c.teacher.toLowerCase().includes(searchTerm) || 
+                c.date.includes(searchTerm)
+            );
+
+            classesList.innerHTML = '';
+            if (filteredClasses.length === 0) {
+                classesList.innerHTML = '<tr><td colspan="7" style="text-align: center;">کلاسی یافت نشد</td></tr>';
+                return;
+            }
+
+            filteredClasses.forEach((cls, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${cls.name}</td>
+                    <td>${cls.teacher}</td>
+                    <td>${cls.date}</td>
+                    <td>${cls.startTime}</td>
+                    <td>${cls.endTime}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm edit-class" data-id="${cls.id}">
+                            <i class="fas fa-edit"></i> ویرایش
+                        </button>
+                        <button class="btn btn-danger btn-sm delete-class" data-id="${cls.id}">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </td>
+                `;
+                classesList.appendChild(row);
+            });
+
+            // Add event listeners to edit and delete buttons
+            document.querySelectorAll('.edit-class').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const classId = this.getAttribute('data-id');
+                    editClass(classId);
+                });
+            });
+
+            document.querySelectorAll('.delete-class').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const classId = this.getAttribute('data-id');
+                    confirmDelete('class', classId);
+                });
+            });
+        }
+
+        function renderStudents() {
+            const searchTerm = searchStudent.value.toLowerCase();
+            const filteredStudents = students.filter(s => 
+                s.name.toLowerCase().includes(searchTerm) || 
+                s.studentId.includes(searchTerm)
+            );
+
+            studentsList.innerHTML = '';
+            if (filteredStudents.length === 0) {
+                studentsList.innerHTML = '<tr><td colspan="4" style="text-align: center;">دانشجویی یافت نشد</td></tr>';
+                return;
+            }
+
+            filteredStudents.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${student.name}</td>
+                    <td>${student.studentId}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm edit-student" data-id="${student.id}">
+                            <i class="fas fa-edit"></i> ویرایش
+                        </button>
+                        <button class="btn btn-danger btn-sm delete-student" data-id="${student.id}">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </td>
+                `;
+                studentsList.appendChild(row);
+            });
+
+            // Add event listeners to edit and delete buttons
+            document.querySelectorAll('.edit-student').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const studentId = this.getAttribute('data-id');
+                    editStudent(studentId);
+                });
+            });
+
+            document.querySelectorAll('.delete-student').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const studentId = this.getAttribute('data-id');
+                    confirmDelete('student', studentId);
+                });
+            });
+        }
+
+        function renderAttendanceList(classId) {
+            const classStudents = students; // In a real app, you might have class-student associations
+            const currentSessionRecords = attendanceRecords.filter(ar => ar.classId === classId);
+            
+            attendanceList.innerHTML = '';
+            if (classStudents.length === 0) {
+                attendanceList.innerHTML = '<tr><td colspan="5" style="text-align: center;">دانشجویی برای این کلاس ثبت نشده است</td></tr>';
+                return;
+            }
+
+            classStudents.forEach((student, index) => {
+                const record = currentSessionRecords.find(r => r.studentId === student.id);
+                const status = record ? record.status : 'absent';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${student.name}</td>
+                    <td>${student.studentId}</td>
+                    <td>
+                        <span class="badge ${status === 'present' ? 'badge-success' : 'badge-danger'}">
+                            ${status === 'present' ? 'حاضر' : 'غایب'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-success btn-sm mark-present" data-id="${student.id}">
+                            <i class="fas fa-check"></i> حضور
+                        </button>
+                        <button class="btn btn-danger btn-sm mark-absent" data-id="${student.id}">
+                            <i class="fas fa-times"></i> غیاب
+                        </button>
+                        <button class="btn btn-secondary btn-sm reset-attendance" data-id="${student.id}">
+                            <i class="fas fa-undo"></i> بازنشانی
+                        </button>
+                    </td>
+                `;
+                attendanceList.appendChild(row);
+            });
+
+            // Add event listeners to attendance buttons
+            document.querySelectorAll('.mark-present').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const studentId = this.getAttribute('data-id');
+                    markAttendance(studentId, 'present');
+                });
+            });
+
+            document.querySelectorAll('.mark-absent').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const studentId = this.getAttribute('data-id');
+                    markAttendance(studentId, 'absent');
+                });
+            });
+
+            document.querySelectorAll('.reset-attendance').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const studentId = this.getAttribute('data-id');
+                    resetAttendance(studentId);
+                });
+            });
+        }
+
+        function renderReports() {
+            const classId = selectClassForReport.value;
+            let filteredClasses = [];
+            
+            if (classId === 'all') {
+                filteredClasses = [...classes];
+            } else {
+                filteredClasses = classes.filter(c => c.id === classId);
+            }
+
+            reportsList.innerHTML = '';
+            if (filteredClasses.length === 0) {
+                reportsList.innerHTML = '<tr><td colspan="6" style="text-align: center;">کلاسی یافت نشد</td></tr>';
+                classDetails.style.display = 'none';
+                return;
+            }
+
+            filteredClasses.forEach((cls, index) => {
+                const classSessions = sessions.filter(s => s.classId === cls.id);
+                const studentCount = students.length; // In a real app, you might have actual class enrollments
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${cls.name}</td>
+                    <td>${cls.teacher}</td>
+                    <td>${classSessions.length}</td>
+                    <td>${studentCount}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm view-details" data-id="${cls.id}">
+                            <i class="fas fa-eye"></i> مشاهده جزئیات
+                        </button>
+                    </td>
+                `;
+                reportsList.appendChild(row);
+            });
+
+            // Add event listeners to view details buttons
+            document.querySelectorAll('.view-details').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const classId = this.getAttribute('data-id');
+                    showClassDetails(classId);
+                });
+            });
+        }
+
+        function showClassDetails(classId) {
+            const cls = classes.find(c => c.id === classId);
+            if (!cls) return;
+
+            const classSessions = sessions.filter(s => s.classId === classId);
+            const studentCount = students.length; // In a real app, you might have actual class enrollments
+            
+            let detailsHTML = `
+                <h4>${cls.name}</h4>
+                <p>استاد: ${cls.teacher}</p>
+                <p>تاریخ برگزاری: ${cls.date}</p>
+                <p>ساعت: ${cls.startTime} - ${cls.endTime}</p>
+                <p>تعداد جلسات: ${classSessions.length}</p>
+                <p>تعداد دانشجویان: ${studentCount}</p>
+                
+                <h4 style="margin-top: 20px;">جلسات برگزار شده</h4>
+            `;
+
+            if (classSessions.length === 0) {
+                detailsHTML += '<p>هنوز جلسه‌ای برای این کلاس ثبت نشده است.</p>';
+            } else {
+                classSessions.forEach(session => {
+                    detailsHTML += `
+                        <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                            <h5>جلسه در تاریخ ${session.date}</h5>
+                            <table style="width: 100%; margin-top: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th>نام دانشجو</th>
+                                        <th>کد دانشجویی</th>
+                                        <th>وضعیت</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+
+                    students.forEach(student => {
+                        const record = session.attendanceRecords.find(r => r.studentId === student.id);
+                        const status = record ? record.status : 'absent';
+                        
+                        detailsHTML += `
+                            <tr>
+                                <td>${student.name}</td>
+                                <td>${student.studentId}</td>
+                                <td>
+                                    <span class="badge ${status === 'present' ? 'badge-success' : 'badge-danger'}">
+                                        ${status === 'present' ? 'حاضر' : 'غایب'}
+                                    </span>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    detailsHTML += `
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                });
+            }
+
+            // Calculate attendance statistics
+            detailsHTML += '<h4 style="margin-top: 20px;">آمار حضور و غیاب</h4>';
+            
+            if (students.length === 0) {
+                detailsHTML += '<p>دانشجویی برای این کلاس ثبت نشده است.</p>';
+            } else {
+                detailsHTML += `
+                    <table style="width: 100%; margin-top: 10px;">
+                        <thead>
+                            <tr>
+                                <th>نام دانشجو</th>
+                                <th>کد دانشجویی</th>
+                                <th>تعداد حضور</th>
+                                <th>تعداد غیبت</th>
+                                <th>درصد حضور</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                students.forEach(student => {
+                    let presentCount = 0;
+                    let absentCount = 0;
+                    
+                    classSessions.forEach(session => {
+                        const record = session.attendanceRecords.find(r => r.studentId === student.id);
+                        if (record && record.status === 'present') {
+                            presentCount++;
+                        } else {
+                            absentCount++;
+                        }
+                    });
+
+                    const totalSessions = classSessions.length;
+                    const attendancePercentage = totalSessions > 0 ? 
+                        Math.round((presentCount / totalSessions) * 100) : 0;
+                    
+                    detailsHTML += `
+                        <tr>
+                            <td>${student.name}</td>
+                            <td>${student.studentId}</td>
+                            <td>${presentCount}</td>
+                            <td>${absentCount}</td>
+                            <td>${attendancePercentage}%</td>
+                        </tr>
+                    `;
+                });
+
+                detailsHTML += `
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            classDetailsContent.innerHTML = detailsHTML;
+            classDetails.style.display = 'block';
+        }
+
+        function updateClassSelects() {
+            // Update selectClassForAttendance
+            selectClassForAttendance.innerHTML = '<option value="">-- انتخاب کنید --</option>';
+            classes.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls.id;
+                option.textContent = `${cls.name} (${cls.teacher})`;
+                selectClassForAttendance.appendChild(option);
+            });
+
+            // Update selectClassForReport
+            selectClassForReport.innerHTML = '<option value="all">همه کلاس ها</option>';
+            classes.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls.id;
+                option.textContent = `${cls.name} (${cls.teacher})`;
+                selectClassForReport.appendChild(option);
+            });
+        }
+
+        function editClass(classId) {
+            const cls = classes.find(c => c.id === classId);
+            if (!cls) return;
+
+            currentEditingId = classId;
+            document.getElementById('classModalTitle').textContent = 'ویرایش کلاس';
+            className.value = cls.name;
+            teacherName.value = cls.teacher;
+            classDate.value = cls.date;
+            startTime.value = cls.startTime;
+            endTime.value = cls.endTime;
+            calendarContainer.style.display = 'none';
+            classModal.style.display = 'flex';
+        }
+
+        function editStudent(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+
+            currentEditingId = studentId;
+            document.getElementById('studentModalTitle').textContent = 'ویرایش دانشجو';
+            studentName.value = student.name;
+            studentId.value = student.studentId;
+            studentModal.style.display = 'flex';
+        }
+
+        function confirmDelete(type, id) {
+            currentEditingId = id;
+            currentAction = `delete${type.charAt(0).toUpperCase() + type.slice(1)}`;
+            
+            const name = type === 'class' ? 
+                classes.find(c => c.id === id).name : 
+                students.find(s => s.id === id).name;
+                
+            confirmModalMessage.textContent = `آیا از حذف ${type === 'class' ? 'کلاس' : 'دانشجو'} "${name}" مطمئن هستید؟`;
+            confirmModal.style.display = 'flex';
+        }
+
+        function markAttendance(studentId, status) {
+            // Remove any existing record for this student in this class
+            attendanceRecords = attendanceRecords.filter(ar => 
+                !(ar.classId === currentClassIdForAttendance && ar.studentId === studentId)
+            );
+
+            // Add new record
+            attendanceRecords.push({
+                classId: currentClassIdForAttendance,
+                studentId: studentId,
+                status: status
+            });
+
+            renderAttendanceList(currentClassIdForAttendance);
+        }
+
+        function resetAttendance(studentId) {
+            attendanceRecords = attendanceRecords.filter(ar => 
+                !(ar.classId === currentClassIdForAttendance && ar.studentId === studentId)
+            );
+
+            renderAttendanceList(currentClassIdForAttendance);
+        }
+
+        function showAlert(title, message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            let icon;
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-exclamation-circle"></i>';
+                    break;
+                case 'info':
+                    icon = '<i class="fas fa-info-circle"></i>';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    break;
+                default:
+                    icon = '<i class="fas fa-info-circle"></i>';
+            }
+            
+            alert.innerHTML = `
+                ${icon}
+                <div>
+                    <strong>${title}</strong>
+                    <p style="margin: 5px 0 0;">${message}</p>
+                </div>
+                <span class="alert-close">&times;</span>
+            `;
+            
+            alertContainer.appendChild(alert);
+            
+            // Close button
+            alert.querySelector('.alert-close').addEventListener('click', function() {
+                alert.remove();
+            });
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+    </script>
+
+    <!-- SheetJS for Excel export/import -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>
