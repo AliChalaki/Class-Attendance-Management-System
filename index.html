@@ -1018,6 +1018,10 @@
         let currentEditingId = null;
         let currentAction = null;
         let currentClassIdForAttendance = null;
+        
+        // Calendar variables
+        let currentCalendarYear = new Date().getFullYear() - 621; // Persian year
+        let currentCalendarMonth = new Date().getMonth() + 1; // 1-12
 
         // DOM Elements
         const loginPage = document.getElementById('loginPage');
@@ -1179,30 +1183,37 @@
         });
 
         function renderCalendar() {
-            const today = new Date();
-            const currentYear = today.getFullYear() - 621; // Convert to Persian year
-            const currentMonth = today.getMonth() + 1;
-            const currentDay = today.getDate();
-
             const persianMonths = [
                 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
                 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
             ];
 
+            // Calculate days in month (simplified - all months have 31 days in this example)
+            const daysInMonth = 31;
+            
+            // Calculate first day of month (simplified - always starts on Saturday in this example)
+            const firstDay = 0; // 0 = Saturday, 1 = Sunday, etc.
+
             calendarContainer.innerHTML = `
                 <div class="calendar">
                     <div class="calendar-header">
                         <button class="btn btn-sm btn-secondary" id="prevMonth"><i class="fas fa-chevron-right"></i></button>
-                        <h4>${persianMonths[currentMonth - 1]} ${currentYear}</h4>
+                        <h4>${persianMonths[currentCalendarMonth - 1]} ${currentCalendarYear}</h4>
                         <button class="btn btn-sm btn-secondary" id="nextMonth"><i class="fas fa-chevron-left"></i></button>
                     </div>
-                    <div class="calendar-body" id="calendarDays"></div>
+                    <div class="calendar-body" id="calendarDays">
+                        <div style="text-align: center;">ش</div>
+                        <div style="text-align: center;">ی</div>
+                        <div style="text-align: center;">د</div>
+                        <div style="text-align: center;">س</div>
+                        <div style="text-align: center;">چ</div>
+                        <div style="text-align: center;">پ</div>
+                        <div style="text-align: center;">ج</div>
+                    </div>
                 </div>
             `;
 
             // Render days
-            const daysInMonth = 31; // Simplified - in a real app you'd calculate this
-            const firstDay = 1; // Simplified - in a real app you'd calculate this
             const calendarDays = document.getElementById('calendarDays');
             
             // Empty cells for days before the first day of the month
@@ -1227,25 +1238,30 @@
                     this.classList.add('selected');
                     
                     // Set the date in the input field
-                    const month = currentMonth < 10 ? `0${currentMonth}` : currentMonth;
+                    const month = currentCalendarMonth < 10 ? `0${currentCalendarMonth}` : currentCalendarMonth;
                     const dayFormatted = day < 10 ? `0${day}` : day;
-                    classDate.value = `${currentYear}/${month}/${dayFormatted}`;
-                    
-                    // Hide calendar
-                    calendarContainer.style.display = 'none';
+                    classDate.value = `${currentCalendarYear}/${month}/${dayFormatted}`;
                 });
                 calendarDays.appendChild(dayCell);
             }
 
             // Add event listeners for month navigation
             document.getElementById('prevMonth').addEventListener('click', function() {
-                // In a real app, you'd implement month navigation
-                showAlert('اطلاعیه', 'امکان تغییر ماه در نسخه نمایشی وجود ندارد', 'info');
+                currentCalendarMonth--;
+                if (currentCalendarMonth < 1) {
+                    currentCalendarMonth = 12;
+                    currentCalendarYear--;
+                }
+                renderCalendar();
             });
 
             document.getElementById('nextMonth').addEventListener('click', function() {
-                // In a real app, you'd implement month navigation
-                showAlert('اطلاعیه', 'امکان تغییر ماه در نسخه نمایشی وجود ندارد', 'info');
+                currentCalendarMonth++;
+                if (currentCalendarMonth > 12) {
+                    currentCalendarMonth = 1;
+                    currentCalendarYear++;
+                }
+                renderCalendar();
             });
         }
 
